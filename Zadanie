@@ -1,0 +1,91 @@
+class Game:
+    def __init__(self, title, platform, price):
+        self.title = title
+        self.platform = platform
+        self.price = price
+        self.available = True
+
+    def show_information(self):
+        print("Tytuł:", self.title)
+        print("Platforma:", self.platform)
+        print("Cena:", self.price)
+        print("Dostępna:", "Tak" if self.available else "Nie")
+
+class Rental:
+    def __init__(self, name):
+        self.name = name
+        self.games = []
+
+    def add_game(self, game):
+        self.games.append(game)
+
+    def rent_game(self, game):
+        if game in self.games:
+            self.games.remove(game)
+            print("Gra", game.title, "została wypożyczona.")
+        else:
+            print("Gra", game.title, "nie jest dostępna w wypożyczalni.")
+
+    def rent_game(self, game):
+        if game in self.games and game.available:
+            game.available = False
+            print("Gra", game.title, "została wypożyczona.")
+        elif game in self.games and not game.available:
+            print("Gra", game.title, "jest już wypożyczona.")
+        else:
+            print("Gra", game.title, "nie jest dostępna w wypożyczalni.")
+
+    def show_games(self):
+        print("Gry dostępne w", self.name)
+        print("-------------------------------------")
+        for game in self.games:
+            game.show_information()
+            print()
+
+rental = Rental("Wypożyczalnia Gier - 'GAMERent'")
+
+game1 = Game("Diablo III", "PC", 99.99)
+game2 = Game("Assassin's Creed Valhalla", "Xbox", 119.99)
+game3 = Game("The Witcher 3", "PlayStation", 29.99)
+
+rental.add_game(game1)
+rental.add_game(game2)
+rental.add_game(game3)
+
+while True:
+    print("\n=== MENU ===")
+    print("1. Dodaj grę")
+    print("2. Wypożycz grę")
+    print("3. Wyświetl gry")
+    print("4. Wyjście")
+    choose = input("Wybierz opcję: ")
+
+    if choose == "1":
+        title = input("Podaj tytuł gry: ")
+        platform = input("Podaj platformę (PC/Xbox/PlayStation): ")
+        price = float(input("Podaj cenę gry: "))
+        game = Game(title, platform, price)
+        rental.add_game(game)
+        print("Gra", title, "została dodana do wypożyczalni.")
+
+    elif choose == "2":
+        title = input("Podaj tytuł gry: ")
+        found_game = None
+        for game in rental.games:
+            if game.title == title and game.available:
+                found_game = game
+                break
+        if found_game:
+            rental.rent_game(found_game)
+        else:
+            print("Gra", title, "nie jest dostępna do wypożyczenia.")
+
+    elif choose == "3":
+        rental.show_games()
+
+    elif choose == "4":
+        break
+
+    else:
+        
+        print("Nieprawidłowa opcja. Spróbuj ponownie.")
